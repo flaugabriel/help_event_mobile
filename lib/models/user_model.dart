@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
-class UserModel extends Model {
+class UserModel {
   Map<String, dynamic> useData = Map();
 
   bool isLoading = false;
@@ -15,7 +14,6 @@ class UserModel extends Model {
       @required String name,
       @required VoidCallback onSuccess,
       @required VoidCallback onFaill}) async {    isLoading = true;
-    notifyListeners();
 
 
     var url = "http://helpevent.herokuapp.com/api/v1/auth";
@@ -42,7 +40,6 @@ class UserModel extends Model {
       onFaill();
     }
     isLoading = false;
-    notifyListeners();
   }
 
   void signIn(
@@ -52,31 +49,8 @@ class UserModel extends Model {
       @required VoidCallback onFaill}) async {
 
     isLoading = true;
-    notifyListeners();
 
-    var url = "http://helpevent.herokuapp.com/api/v1/auth/sign_in";
-
-    var header = {"Context-type": "application/json"};
-
-    Map params = {"email": userData["email"], "password": pass};
-
-    var response = await http.post(url, headers: header, body: params);
-
-    Map mapResponse = json.decode(response.body);
-
-    if (response.statusCode != '200') {
-      onSuccess();
-    } else {
-      String mensage = mapResponse["errors"];
-      print("message $mensage");
-      onFaill();
-    }
+   
     isLoading = false;
-    notifyListeners();
-  }
-
-  void recoverPass() {}
-
-  bool isLoggedIn() {
   }
 }

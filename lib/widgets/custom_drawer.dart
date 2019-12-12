@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:help_event_mobile/screens/login_screen.dart';
 import 'package:help_event_mobile/titles/drawer_title.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -34,19 +35,24 @@ class CustomDrawer extends StatelessWidget {
                           child: Image.asset(
                             "images/logo.png",
                             height: 100,
-                          )),
-
+                          ),
+                      ),
                     ],
                   ),
                 ),
                 Divider(),
                 DrawerTitle(Icons.dashboard, "Dashboard", pageController, 0),
                 DrawerTitle(Icons.list, "Meus Itens", pageController, 1),
-                DrawerTitle(Icons.notification_important, "Notificações",
-                    pageController, 2),
+                DrawerTitle(Icons.notification_important, "Notificações",pageController, 2),
                 DrawerTitle(Icons.add, "Novo evento", pageController, 3),
                 DrawerTitle(Icons.add, "Novo item", pageController, 4),
                 DrawerTitle(Icons.person, "Configurações", pageController, 5),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
+                  },
+                  child: Text("Log Out", style: TextStyle(color: Colors.white)),
+                ),
               ],
             )
           ],

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:help_event_mobile/models/user_model.dart';
-import 'package:help_event_mobile/screens/home_screen.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -25,13 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue[100],
-      body: ScopedModelDescendant<UserModel>(builder: (context, child, model) {
-        if (model.isLoading) {
-          return Center(child: CircularProgressIndicator());
-        } else {
-          return Container(
+    return Container(
             width: double.maxFinite,
             height: double.maxFinite,
             child: Stack(
@@ -140,24 +131,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
-                                model.signUp(
-                                  email: _emailController.text,
-                                  name: _nameController.text,
-                                  pass: _passController.text,
-                                  pass_confirme:
-                                      _pass_confirmationController.text,
-                                  onFaill: () {
-                                    AlertDialog(
-                                      title: Text("Login invalido"),
-                                    );
-                                  },
-                                  onSuccess: () {
-                                    AlertDialog(
-                                      title: Text("Bem vindo!"),
-                                      actions: <Widget>[HomeScreen()],
-                                    );
-                                  }, userData: null,
-                                );
                               }
                             },
                           ),
@@ -185,7 +158,4 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           );
         }
-      }),
-    );
-  }
 }
