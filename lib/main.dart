@@ -44,12 +44,14 @@ class _MainScreenState extends State<MainPage> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
+    print(sharedPreferences.getString("token"));
+    print(sharedPreferences.getString("client"));
+    print(sharedPreferences.getString("uid"));
     if(sharedPreferences.getString("token") == null) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
     }
   }
 
-  final _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {

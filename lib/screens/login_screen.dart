@@ -162,6 +162,8 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
         sharedPreferences.setString("token", (response.headers['access-token']));
+        sharedPreferences.setString("client", (response.headers['client']));
+        sharedPreferences.setString("uid", (response.headers['uid']));
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MyApp()),
             (Route<dynamic> route) => false);

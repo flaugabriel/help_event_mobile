@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:help_event_mobile/screens/login_screen.dart';
+import 'package:help_event_mobile/model/item_model.dart';
 import 'package:help_event_mobile/tabs/home_tab.dart';
 import 'package:help_event_mobile/widgets/custom_drawer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,24 +12,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var jsonData;
+  ItemModel itemModel;
   final _pageController = PageController();
 
-  SharedPreferences sharedPreferences;
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    checkLoginStatus();
-
-  }
-
-  checkLoginStatus() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    if(sharedPreferences.getString("access-token") == null) {
-            Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
-            (Route<dynamic> route) => false);
-
-    }
+    getItems();
   }
 
   @override
@@ -39,16 +31,25 @@ class _HomeScreenState extends State<HomeScreen> {
           body: HomeTab(),
           drawer: CustomDrawer(_pageController),
         ),
-        Scaffold(
-          appBar: AppBar(
-            title: Text("Produtos"),
-            centerTitle: true,
+        Container(
+          color: Colors.orange,
+          child: ListView(
+
           ),
-          drawer: CustomDrawer(_pageController),
-        ),
-        Container(color: Colors.orange)
+        )
       ],
     );
+  }
 
+  getItems() async {
+    final response = await http.get(
+        "http://helpevent.gabrielflauzino.com.br/api/v1/");
+    if (response.statusCode == 200) {
+      jsonData = json.decode(response.body);
+      itemModel = ItemModel.fromJson(jsonData);
+      print(jsonData);
+      setState(() {});
+    }
   }
 }
+
