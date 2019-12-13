@@ -150,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
   signIn(String email, String password) async {
 
 
-    var url = "http://helpevent.herokuapp.com/api/v1/auth/sign_in";
+    var url = "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_in";
     var header = {"Context-type": "application/json"};
     Map params = {"email": email, "password": password};
 
@@ -164,6 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
         sharedPreferences.setString("token", (response.headers['access-token']));
         sharedPreferences.setString("client", (response.headers['client']));
         sharedPreferences.setString("uid", (response.headers['uid']));
+        sharedPreferences.setString("password", (password));
+        sharedPreferences.setString("email", (email));
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MyApp()),
             (Route<dynamic> route) => false);

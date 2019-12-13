@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:help_event_mobile/screens/home_screen.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
-import 'package:help_event_mobile/widgets/custom_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -33,6 +32,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainPage> {
+  bool _isLoading = false;
 
   SharedPreferences sharedPreferences;
 
@@ -44,11 +44,37 @@ class _MainScreenState extends State<MainPage> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    print(sharedPreferences.getString("token"));
-    print(sharedPreferences.getString("client"));
-    print(sharedPreferences.getString("uid"));
+
     if(sharedPreferences.getString("token") == null) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
+    }else{
+      var sharedPreferences = await SharedPreferences.getInstance();
+
+      var url = "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_in";
+      var header = {"Context-type": "application/json"};
+
+      Map params = {"email": sharedPreferences.getString("email"), "password": sharedPreferences.getString("password")};
+
+      var response = await http.post(url, headers: header, body: params);
+
+      if (response.statusCode == 200) {
+        print("LOGADO!");
+
+        setState(() {
+          _isLoading = false;
+          sharedPreferences.setString("token", (response.headers['access-token']));
+          sharedPreferences.setString("client", (response.headers['client']));
+          sharedPreferences.setString("uid", (response.headers['uid']));
+          sharedPreferences.setString("passsword", ( sharedPreferences.getString("password")));
+          sharedPreferences.setString("email", ( sharedPreferences.getString("email")));
+        });
+      } else {
+        print("IVALIDO!");
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
