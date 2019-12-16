@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
-import 'package:help_event_mobile/titles/drawer_title.dart';
 
 class CustomDrawer extends StatelessWidget {
-  final PageController pageController;
-
-  CustomDrawer(this.pageController);
 
   Widget _buidDrawerBack() => Container(
         color: Color.fromRGBO(67, 64, 60, 1),
@@ -30,28 +26,199 @@ class CustomDrawer extends StatelessWidget {
                   child: Stack(
                     children: <Widget>[
                       Positioned(
-                          top: 18.0,
-                          left: 18.0,
-                          child: Image.asset(
-                            "images/logo.png",
-                            height: 100,
-                          ),
+                        top: 18.0,
+                        left: 18.0,
+                        child: Image.asset(
+                          "images/logo.png",
+                          height: 100,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Divider(),
-                DrawerTitle(Icons.dashboard, "Dashboard", pageController, 0),
-                DrawerTitle(Icons.list, "Meus Itens", pageController, 1),
-                DrawerTitle(Icons.notification_important, "Notificações",pageController, 2),
-                DrawerTitle(Icons.add, "Novo evento", pageController, 3),
-                DrawerTitle(Icons.add, "Novo item", pageController, 4),
-                DrawerTitle(Icons.person, "Configurações", pageController, 5),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
-                  },
-                  child: Text("Log Out", style: TextStyle(color: Colors.white)),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 60.0,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.dashboard,
+                            size: 32.0,
+                            color: Colors.white,
+                            // controller.page.round() == page ?
+                            // Colors.white : Colors.grey[700] ,
+                          ),
+                          SizedBox(width: 32.0),
+                          Text(
+                            "Dashboard",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 60.0,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.list,
+                            size: 32.0,
+                            color: Colors.white,
+                            // controller.page.round() == page ?
+                            // Colors.white : Colors.grey[700] ,
+                          ),
+                          SizedBox(width: 32.0),
+                          Text(
+                            "Meus Itens",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 60.0,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.notification_important,
+                            size: 32.0,
+                            color: Colors.white,
+                            // controller.page.round() == page ?
+                            // Colors.white : Colors.grey[700] ,
+                          ),
+                          SizedBox(width: 32.0),
+                          Text(
+                            "Notificações",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 60.0,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.add,
+                            size: 32.0,
+                            color: Colors.white,
+                            // controller.page.round() == page ?
+                            // Colors.white : Colors.grey[700] ,
+                          ),
+                          SizedBox(width: 32.0),
+                          Text(
+                            "Novo evento",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 60.0,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.add,
+                            size: 32.0,
+                            color: Colors.white,
+                            // controller.page.round() == page ?
+                            // Colors.white : Colors.grey[700] ,
+                          ),
+                          SizedBox(width: 32.0),
+                          Text(
+                            "Novo Item",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 60.0,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.person,
+                            size: 32.0,
+                            color: Colors.white,
+                            // controller.page.round() == page ?
+                            // Colors.white : Colors.grey[700] ,
+                          ),
+                          SizedBox(width: 32.0),
+                          Text(
+                            "Configurações",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(),
+                  Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 60.0,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.power_settings_new,
+                            size: 32.0,
+                            color: Colors.red,
+                            // controller.page.round() == page ?
+                            // Colors.white : Colors.grey[700] ,
+                          ),
+                          SizedBox(width: 32.0),
+                          Text(
+                            "Sair",
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.red),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             )
@@ -59,5 +226,9 @@ class CustomDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  signOut(){
+
   }
 }

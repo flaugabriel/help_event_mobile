@@ -4,7 +4,6 @@ class EventModel {
   EventModel({this.event});
 
   EventModel.fromJson(Map<String, dynamic> json) {
-    print(json['event']);
     if (json['event'] != null) {
       event = new List<Event>();
       json['event'].forEach((v) {
@@ -25,7 +24,7 @@ class EventModel {
 class Event {
   int id;
   String description;
-  DateTime created_at;
+  String created_at;
   String user;
   String total;
 

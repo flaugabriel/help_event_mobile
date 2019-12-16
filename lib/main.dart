@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:help_event_mobile/screens/home_screen.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
+import 'package:help_event_mobile/widgets/custom_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +21,6 @@ class MyApp extends StatelessWidget {
       ),
       home: MainPage(),
       // home:
-      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -58,8 +58,6 @@ class _MainScreenState extends State<MainPage> {
       var response = await http.post(url, headers: header, body: params);
 
       if (response.statusCode == 200) {
-        print("LOGADO!");
-
         setState(() {
           _isLoading = false;
           sharedPreferences.setString("token", (response.headers['access-token']));
@@ -69,8 +67,6 @@ class _MainScreenState extends State<MainPage> {
           sharedPreferences.setString("email", ( sharedPreferences.getString("email")));
         });
       } else {
-        print("IVALIDO!");
-
         setState(() {
           _isLoading = false;
         });
@@ -81,8 +77,20 @@ class _MainScreenState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-            home: HomeScreen(),
+    return Stack(
+      children: <Widget>[
+        Scaffold(
+          backgroundColor: Colors.orange,
+          appBar: new AppBar(
+            backgroundColor: Colors.transparent,
+            iconTheme: new IconThemeData(color: Colors.white,
+            size: 100.0),
+            elevation: 0.0,
+          ),
+          body: HomeScreen(),
+          drawer: CustomDrawer(),
+        ),
+      ],
     );
   }
 }
