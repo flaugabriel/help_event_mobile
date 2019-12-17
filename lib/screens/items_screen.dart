@@ -28,9 +28,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
         body: itemModel == null
             ? Center(
                 child: CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation<Color>(
-                      Colors.white70
-                  ),
+                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.white70),
                 ),
               )
             : GridView.count(
@@ -41,43 +39,66 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 children: itemModel.item
                     .map(
                       (Item item) => Card(
-                          color: Color.fromRGBO(0, 155, 182, 1),
-                          margin: EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 20,
-                          ),
-                          child: new InkWell(
-                            onTap: () {
-
-                            },
-                            child: Column(children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                    item.description,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white),
-                                  ),
-                                  Ink(
-                                    child: ListTile(
-                                      trailing: Container(
-                                        color: Colors.white,
-                                        padding: EdgeInsets.only(top: 30.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
+                              bottomRight: Radius.circular(50)),
+                        ),
+                        color: Color.fromRGBO(0, 155, 182, 1),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 7,
+                              child: Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: 15.0, left: 20),
                                         child: Text(
-                                          "R\$ ${item.value}",
+                                          item.description,
                                           style: TextStyle(
-                                              fontSize: 18.0
-                                          ),
+                                              fontSize: 21,
+                                              color: Colors.white),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ],
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: 10.0, left: 20),
+                                        child: Text(
+                                          item.location,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white),
+                                        ),
+                                      )
+                                    ]),
                               ),
-                            ]
                             ),
-                          ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                padding: EdgeInsets.only(top: 80),
+                                color: Colors.white,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    Text(
+                                      "R\$ ${item.value}",
+                                      style: TextStyle(
+                                          color: Colors.green, fontSize: 24),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                     .toList(),
