@@ -4,9 +4,9 @@ class ItemModel {
   ItemModel({this.item});
 
   ItemModel.fromJson(Map<String, dynamic> json) {
-    if (json['item'] != null) {
+    if (json['items'] != null) {
       item = new List<Item>();
-      json['item'].forEach((v) {
+      json['items'].forEach((v) {
         item.add(new Item.fromJson(v));
       });
     }
@@ -15,7 +15,7 @@ class ItemModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.item != null) {
-      data['item'] = this.item.map((v) => v.toJson()).toList();
+      data['items'] = this.item.map((v) => v.toJson()).toList();
     }
     return data;
   }
