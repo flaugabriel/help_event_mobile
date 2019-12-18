@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return PageView(children: <Widget>[
       Scaffold(
-          backgroundColor: Colors.orange,
+          backgroundColor: Color.fromRGBO(251, 173, 59, 1),
           body: eventModel == null
               ? Center(
                   child: CircularProgressIndicator(

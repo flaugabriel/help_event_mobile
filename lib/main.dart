@@ -79,7 +79,7 @@ class _MainScreenState extends State<MainPage> {
     return Stack(
       children: <Widget>[
         Scaffold(
-          backgroundColor: Colors.orange,
+          backgroundColor: Color.fromRGBO(251, 173, 59, 1),
           appBar: new AppBar(
             backgroundColor: Colors.transparent,
             iconTheme: new IconThemeData(color: Colors.white,

@@ -49,7 +49,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 )
                     : GridView.count(
                   crossAxisCount: 1,
-                  childAspectRatio: 20 / 4,
+                  childAspectRatio: 15 / 4,
                   scrollDirection: Axis.vertical,
                   physics: BouncingScrollPhysics(),
                   children: itemModel.item
@@ -91,7 +91,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                             flex: 3,
                             child: Container(
                               padding:
-                              EdgeInsets.only(bottom: 10, top: 18),
+                              EdgeInsets.only(bottom: 15, top: 40),
                               color: Colors.white,
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
