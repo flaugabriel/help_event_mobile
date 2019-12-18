@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:help_event_mobile/screens/home_screen.dart';
-import 'package:help_event_mobile/screens/items_screen.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
 import 'package:help_event_mobile/widgets/custom_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +20,6 @@ class MyApp extends StatelessWidget {
 
       ),
       home: MainPage(),
-      // home:
     );
   }
 }
@@ -88,7 +86,7 @@ class _MainScreenState extends State<MainPage> {
             size: 100.0),
             elevation: 0.0,
           ),
-          body: ItemsScreen(),
+          body: HomeScreen(),
           drawer: CustomDrawer(),
         ),
       ],

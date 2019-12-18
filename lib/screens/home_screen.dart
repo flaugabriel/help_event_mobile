@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:help_event_mobile/main.dart';
 import 'package:help_event_mobile/model/event_model.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
-import 'package:help_event_mobile/widgets/custom_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +12,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  bool _isLoading = false;
+
+  SharedPreferences sharedPreferences;
+
   var jsonData;
   EventModel eventModel;
 
@@ -90,7 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
     var sharedPreferences = await SharedPreferences.getInstance();
 
     Map<String, String> headers = {
-      "Content-type": "application/json",
       "access-token": "${sharedPreferences.getString("token")}",
       "uid": "${sharedPreferences.getString("uid")}",
       "client": "${sharedPreferences.getString("client")}"
@@ -105,9 +108,43 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {});
     } else {
       print("não carregou os itens: ${response.body}");
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
-              (Route<dynamic> route) => false);
+      checkLoginStatus();
+    }
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    if(sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
+    }else{
+      var sharedPreferences = await SharedPreferences.getInstance();
+
+      var url = "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_in";
+      Map params = {"email": sharedPreferences.getString("email"), "password": sharedPreferences.getString("password")};
+
+      var response = await http.post(url, body: params);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _isLoading = false;
+          sharedPreferences.setString("token", (response.headers['access-token']));
+          sharedPreferences.setString("client", (response.headers['client']));
+          sharedPreferences.setString("uid", (response.headers['uid']));
+          sharedPreferences.setString("passsword", ( sharedPreferences.getString("password")));
+          sharedPreferences.setString("email", ( sharedPreferences.getString("email")));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (BuildContext context) => MainPage()),
+                  (Route<dynamic> route) => false);
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
+                  (Route<dynamic> route) => false);
+        });
+      }
     }
   }
 }

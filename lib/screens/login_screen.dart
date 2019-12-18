@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:help_event_mobile/screens/home_screen.dart';
 import 'package:help_event_mobile/screens/signup_screen.dart';
 import 'package:http/http.dart' as http;
-import 'package:help_event_mobile/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -151,10 +151,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
     var url = "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_in";
-    var header = {"Context-type": "application/json"};
     Map params = {"email": email, "password": password};
 
-    var response = await http.post(url, headers: header, body: params);
+    var response = await http.post(url, body: params);
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
@@ -166,8 +165,9 @@ class _LoginScreenState extends State<LoginScreen> {
         sharedPreferences.setString("uid", (response.headers['uid']));
         sharedPreferences.setString("password", (password));
         sharedPreferences.setString("email", (email));
+
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => MyApp()),
+            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
             (Route<dynamic> route) => false);
       });
     } else {

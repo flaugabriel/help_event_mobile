@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:help_event_mobile/screens/login_screen.dart';
+import 'package:help_event_mobile/main.dart';
+import 'package:help_event_mobile/screens/items_screen.dart';
+import 'package:help_event_mobile/screens/new_item_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
 
@@ -40,7 +42,11 @@ class CustomDrawer extends StatelessWidget {
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context) => MainPage()));
+                    },
                     child: Container(
                       height: 60.0,
                       child: Row(
@@ -54,7 +60,7 @@ class CustomDrawer extends StatelessWidget {
                           ),
                           SizedBox(width: 32.0),
                           Text(
-                            "Dashboard",
+                            "Eventos",
                             style:
                                 TextStyle(fontSize: 24.0, color: Colors.white),
                           )
@@ -66,7 +72,11 @@ class CustomDrawer extends StatelessWidget {
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context) => ItemsScreen()));
+                    },
                     child: Container(
                       height: 60.0,
                       child: Row(
@@ -144,7 +154,11 @@ class CustomDrawer extends StatelessWidget {
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context) => NewItemScreen()));
+                    },
                     child: Container(
                       height: 60.0,
                       child: Row(
