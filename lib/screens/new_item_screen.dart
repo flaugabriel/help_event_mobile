@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:help_event_mobile/screens/items_screen.dart';
 import 'package:help_event_mobile/widgets/custom_drawer.dart';
@@ -18,7 +20,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
 
   @override
   Widget build(BuildContext context) {
-  SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferences;
 
     return Stack(
       children: <Widget>[
@@ -45,8 +47,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                       child: TextFormField(
                         controller: _descriptionController,
                         validator: (text) {
-                          if (text.isEmpty )
-                            return "Descrição não inserida!";
+                          if (text.isEmpty) return "Descrição não inserida!";
                         },
                         decoration: InputDecoration(
                           filled: true,
@@ -86,8 +87,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                           ),
                         ),
                         validator: (text) {
-                          if (text.isEmpty )
-                            return "Valor não inserido!";
+                          if (text.isEmpty) return "Valor não inserido!";
                         },
                       ),
                     ),
@@ -150,42 +150,50 @@ class _NewItemScreenState extends State<NewItemScreen> {
   }
 
   createItem(String description, String value, String location) async {
-    var sharedPreferences = await SharedPreferences.getInstance();
 
+    var sharedPreferences = await SharedPreferences.getInstance();
     var url = "http://helpevent.gabrielflauzino.com.br/api/v1/items";
- 
+
     Map<String, String> headers = {
+      "Context-type": "application/json",
+      "Accept": "application/json",
       "access-token": "${sharedPreferences.getString("token")}",
       "uid": "${sharedPreferences.getString("uid")}",
       "client": "${sharedPreferences.getString("client")}"
     };
-    Map params = { 'item': { 'description': description, 'value': value, 'location': location }};
 
-    var response = await http.post(url, headers: headers ,body: params);
-    
-    print(response.body);
+    Map data = {
+      'item': {
+        'description': "${description}",
+        'value': "${value}",
+        'location': "${location}"
+      },
+    };
 
+
+    final response = await http.post(url, headers: headers, body: json.encode(data));
 
     if (response.statusCode == 200) {
+
       setState(() {
         _isLoading = false;
         sharedPreferences.setString(
             "token", (response.headers['access-token']));
-        sharedPreferences.setString("token", (response.headers['access-token']));
         sharedPreferences.setString("client", (response.headers['client']));
         sharedPreferences.setString("uid", (response.headers['uid']));
-        sharedPreferences.setString("passsword", ( sharedPreferences.getString("password")));
-        sharedPreferences.setString("email", ( sharedPreferences.getString("email")));
-
+        sharedPreferences.setString(
+            "passsword", (sharedPreferences.getString("password")));
+        sharedPreferences.setString(
+            "email", (sharedPreferences.getString("email")));
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => ItemsScreen()),
             (Route<dynamic> route) => false);
       });
+
     } else {
       setState(() {
         _isLoading = false;
       });
     }
   }
-
 }
