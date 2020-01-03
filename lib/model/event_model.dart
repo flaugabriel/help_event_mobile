@@ -41,7 +41,7 @@ class Event {
     description = json['description'];
     created_at = json['created_at'];
     user = json['user'];
-    total = json['total'];
+    total = json['total'] == null ? '0,0' : json['total'];
   }
 
   Map<String, dynamic> toJson() {

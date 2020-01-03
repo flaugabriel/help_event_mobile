@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:help_event_mobile/main.dart';
 import 'package:help_event_mobile/model/event_model.dart';
+import 'package:help_event_mobile/screens/events/show_event.screen.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +51,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             margin: EdgeInsets.symmetric(vertical: 25, horizontal: 25),
                             child: new InkWell(
                               onTap: (){
-
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    
+                                    builder: (context)=>ShowEventScreen(
+                                      user: event.user,
+                                      description: event.description,
+                                      total: event.total,
+                                      created_at: event.created_at,
+                                      id: event.id,)
+                                    )
+                                );
                               },
                               child: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -103,11 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
         headers: headers);
     if (response.statusCode == 200) {
       jsonData = json.decode(response.body);
-      print(jsonData);
       eventModel = EventModel.fromJson(jsonData);
       setState(() {});
     } else {
-      print("não carregou os itens: ${response.body}");
       checkLoginStatus();
     }
   }

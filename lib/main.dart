@@ -31,6 +31,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainPage> {
+  
+  
   bool _isLoading = false;
 
   SharedPreferences sharedPreferences;

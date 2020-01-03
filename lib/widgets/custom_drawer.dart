@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:help_event_mobile/main.dart';
 import 'package:help_event_mobile/screens/items_screen.dart';
+import 'package:help_event_mobile/screens/login_screen.dart';
+import 'package:help_event_mobile/screens/new_event_screen.dart';
 import 'package:help_event_mobile/screens/new_item_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class CustomDrawer extends StatelessWidget {
-
   Widget _buidDrawerBack() => Container(
         color: Color.fromRGBO(67, 64, 60, 1),
       );
@@ -44,8 +47,7 @@ class CustomDrawer extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (context) => MainPage()));
+                          MaterialPageRoute(builder: (context) => MainPage()));
                     },
                     child: Container(
                       height: 60.0,
@@ -73,9 +75,8 @@ class CustomDrawer extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (context) => ItemsScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => ItemsScreen()));
                     },
                     child: Container(
                       height: 60.0,
@@ -128,7 +129,10 @@ class CustomDrawer extends StatelessWidget {
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => NewEventScreen()));
+                    },
                     child: Container(
                       height: 60.0,
                       child: Row(
@@ -155,9 +159,8 @@ class CustomDrawer extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (context) => NewItemScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => NewItemScreen()));
                     },
                     child: Container(
                       height: 60.0,
@@ -208,10 +211,25 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
                 Divider(),
-                  Material(
+                Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async{
+                      var sharedPreferences = await SharedPreferences.getInstance();
+                      Map<String, String> headers = {
+                        "access-token": "${sharedPreferences.getString("token")}",
+                        "uid": "${sharedPreferences.getString("uid")}",
+                        "client": "${sharedPreferences.getString("client")}"
+                      };
+                      final response = await http.delete(
+                          "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_out",
+                          headers: headers);
+                      if (response.statusCode == 200) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
+                            (Route<dynamic> route) => false);
+                      }
+                    },
                     child: Container(
                       height: 60.0,
                       child: Row(
@@ -226,8 +244,7 @@ class CustomDrawer extends StatelessWidget {
                           SizedBox(width: 32.0),
                           Text(
                             "Sair",
-                            style:
-                                TextStyle(fontSize: 24.0, color: Colors.red),
+                            style: TextStyle(fontSize: 24.0, color: Colors.red),
                           )
                         ],
                       ),
@@ -240,9 +257,5 @@ class CustomDrawer extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  signOut(){
-
   }
 }

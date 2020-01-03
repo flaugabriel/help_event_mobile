@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:help_event_mobile/main.dart';
 import 'package:help_event_mobile/screens/home_screen.dart';
 import 'package:help_event_mobile/screens/signup_screen.dart';
 import 'package:http/http.dart' as http;
@@ -167,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
         sharedPreferences.setString("email", (email));
 
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
+            MaterialPageRoute(builder: (BuildContext context) => MainPage()),
             (Route<dynamic> route) => false);
       });
     } else {
