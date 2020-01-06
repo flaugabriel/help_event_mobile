@@ -51,26 +51,21 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
         ],
         backgroundColor: Color.fromRGBO(0, 155, 182, 1),
       ),
-      bottomNavigationBar:BottomAppBar(
-        elevation: 0,
-        color: Color(0xff344955),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          height: 56.0,
-          child: Row(children: <Widget>[
-            IconButton(
-              onPressed: showMenu,
-              icon: Icon(Icons.menu),
-              color: Colors.white,
-            ),
-            Spacer(),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.add),
-              color: Colors.white,
-            )
-          ]),
-        ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                child: IconButton(
+                  onPressed: showMenu,
+                  icon: Icon(Icons.add),
+                  color: Colors.black,
+                  tooltip: "Adicionar item",
+                ),
+              ),
+            ]),
       ),
       body: Scaffold(
         backgroundColor: Color.fromRGBO(251, 173, 59, 1),
@@ -305,138 +300,68 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
     });
   }
 
-   showMenu() {
+  showMenu() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.0),
-                topRight: Radius.circular(16.0),
+                topLeft: Radius.circular(50.0),
+                topRight: Radius.circular(50.0),
               ),
-              color: Color(0xff232f34),
+              color: Colors.white,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50.0),
+                      topRight: Radius.circular(50.0),
+                    ),
+                    color: Colors.white,
+                  ),
                   height: 36,
                 ),
                 SizedBox(
                     height: (56 * 6).toDouble(),
                     child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16.0),
-                            topRight: Radius.circular(16.0),
-                          ),
-                          color: Color(0xff344955),
-                        ),
                         child: Stack(
-                          alignment: Alignment(0, 0),
-                          overflow: Overflow.visible,
-                          children: <Widget>[
-                            Positioned(
-                              top: -36,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50)),
-                                    border: Border.all(
-                                        color: Color(0xff232f34), width: 10)),
-                                child: Center(
-                                  child: ClipOval(
-                                    child: Image.network(
-                                      "https://i.stack.imgur.com/S11YG.jpg?s=64&g=1",
-                                      fit: BoxFit.cover,
-                                      height: 36,
-                                      width: 36,
-                                    ),
-                                  ),
-                                ),
+                      alignment: Alignment(0, 0),
+                      overflow: Overflow.visible,
+                      children: <Widget>[
+                        Positioned(
+                          top: -36,
+                          child: Container(
+                            child: Center(
+                              child: Text(
+                                "Novo item",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 24),
                               ),
                             ),
-                            Positioned(
-                              child: ListView(
-                                physics: NeverScrollableScrollPhysics(),
-                                children: <Widget>[
-                                  ListTile(
-                                    title: Text(
-                                      "Inbox",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    leading: Icon(
-                                      Icons.inbox,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {},
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      "Starred",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    leading: Icon(
-                                      Icons.star_border,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {},
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      "Sent",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    leading: Icon(
-                                      Icons.send,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {},
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      "Trash",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    leading: Icon(
-                                      Icons.delete_outline,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {},
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      "Spam",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    leading: Icon(
-                                      Icons.error,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {},
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      "Drafts",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    leading: Icon(
-                                      Icons.mail_outline,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {},
-                                  ),
-                                ],
+                          ),
+                        ),
+                        Positioned(
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            children: <Widget>[
+                              ListTile(
+                                title: Text(
+                                  "YRsdfgsd sd",
+                                  style: TextStyle(color: Colors.black, fontSize:18 ),
+                                ),
+                                trailing: Icon(Icons.add),
+                                onTap: () {},
                               ),
-                            )
-                          ],
-                        ))),
-                Container(
-                  height: 56,
-                  color: Color(0xff4a6572),
-                )
+                            ],
+                          ),
+                        )
+                      ],
+                    ))),
               ],
             ),
           );

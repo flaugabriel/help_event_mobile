@@ -25,11 +25,13 @@ class Event {
   int id;
   String description;
   String created_at;
+  int items;
   String user;
   String total;
 
   Event(
       {this.id,
+      this.items,
         this.description,
         this.created_at,
         this.user,
@@ -40,6 +42,7 @@ class Event {
     id = json['id'];
     description = json['description'];
     created_at = json['created_at'];
+    items = json['items']  == null ? '0' : json['items'];
     user = json['user'];
     total = json['total'] == null ? '0,0' : json['total'];
   }
@@ -49,6 +52,7 @@ class Event {
     data['id'] = this.id;
     data['description'] = this.description;
     data['created_at'] = this.created_at;
+    data['items'] = this.items;
     data['user'] = this.user;
     data['total'] = this.total;
     return data;

@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             color: Colors.transparent,
                                           ),
                                           Text(
-                                            '6 items já adicionado',)
+                                            '${event.items} items já adicionado',)
                                         ],
 
                                       ),
