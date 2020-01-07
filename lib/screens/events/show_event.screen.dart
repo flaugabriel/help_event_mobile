@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:help_event_mobile/model/event_item_model.dart';
-import 'package:help_event_mobile/model/item_model.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,21 +50,21 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
         ],
         backgroundColor: Color.fromRGBO(0, 155, 182, 1),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                child: IconButton(
-                  onPressed: showMenu,
-                  icon: Icon(Icons.add),
-                  color: Colors.black,
-                  tooltip: "Adicionar item",
-                ),
-              ),
-            ]),
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.white,
+        icon: Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
+        label: Text(
+          "Novo item",
+          style: TextStyle(color: Colors.black, fontSize: 24),
+        ),
+        onPressed: showMenu,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
       ),
       body: Scaffold(
         backgroundColor: Color.fromRGBO(251, 173, 59, 1),
@@ -100,102 +99,89 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                       )
                     : GridView.count(
                         crossAxisCount: 1,
-                        childAspectRatio: 15 / 4,
+                        childAspectRatio: 17 / 6,
                         scrollDirection: Axis.vertical,
                         physics: BouncingScrollPhysics(),
                         children: eventItemModel.event_item
                             .map((EventItem eventItem) => GestureDetector(
-                                  onTap: () {},
+                                onTap: () {},
+                                child: Container(
+                                  width: 200,
                                   child: Card(
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
                                     margin: EdgeInsets.only(
                                         left: 20, right: 20, top: 5),
-                                    color: Color.fromRGBO(0, 155, 182, 1),
-                                    child: Row(
+                                    color: Colors.white,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        Expanded(
-                                          flex: 4,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                bottom: 15, left: 5),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  eventItem.description,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 21),
-                                                ),
-                                                Text(
-                                                  eventItem.location,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12),
-                                                )
-                                              ],
+                                        ListTile(
+                                            leading: Text(
+                                              "R\$ ${eventItem.value}",
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontSize: 24),
                                             ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 3,
-                                          child: Container(
-                                            padding: EdgeInsets.only(
-                                                bottom: 20, top: 40),
-                                            color: Colors.white,
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: <Widget>[
-                                                Text(
-                                                  "R\$ ${eventItem.value}",
-                                                  style: TextStyle(
+                                            title: Text(
+                                              eventItem.description,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 21),
+                                            ),
+                                            subtitle: Text(
+                                              eventItem.location,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            )),
+                                        ButtonTheme(
+                                          child: ButtonBar(
+                                            children: <Widget>[
+                                              FlatButton(
+                                                onPressed: null,
+                                                child: Column(
+                                                  // Replace with a Row for horizontal icon + text
+                                                  children: <Widget>[
+                                                    Icon(
+                                                      Icons.check,
                                                       color: Colors.green,
-                                                      fontSize: 24),
+                                                    ),
+                                                    Text(
+                                                      "Comprado",
+                                                      style: TextStyle(
+                                                          color: Colors.green),
+                                                    )
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                              FlatButton(
+                                                onPressed: null,
+                                                child: Column(
+                                                  children: <Widget>[
+                                                      Icon(
+                                                      Icons.delete,
+                                                      color: Colors.red,
+                                                    ),
+                                                    Text(
+                                                      "Remove",
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                    )
+                                                  ],
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
-                                        Expanded(
-                                          flex: 5,
-                                          child: Container(
-                                            color: Colors.transparent,
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: <Widget>[
-                                                Center(
-                                                  child: RaisedButton.icon(
-                                                    color: Colors.white,
-                                                    onPressed: () {},
-                                                    textColor: Colors.green,
-                                                    icon: Icon(
-                                                      Icons.check_circle,
-                                                    ),
-                                                    label: Text("Comprado!"),
-                                                  ),
-                                                ),
-                                                Center(
-                                                  child: RaisedButton.icon(
-                                                    color: Colors.red,
-                                                    onPressed: () {},
-                                                    textColor: Colors.white,
-                                                    icon: Icon(
-                                                      Icons.delete,
-                                                    ),
-                                                    label: Text("Remover!"),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                        // COlumn 2 End
                                       ],
                                     ),
                                   ),
-                                ))
-                            .toList(),
+                                )))
+                          .toList(),
                       ),
               ),
             ])
@@ -333,33 +319,53 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
                       alignment: Alignment(0, 0),
                       overflow: Overflow.visible,
                       children: <Widget>[
-                        Positioned(
-                          top: -36,
-                          child: Container(
-                            child: Center(
+                        GridView.count(
+                        crossAxisCount: 1,
+                        childAspectRatio: 17 / 6,
+                        scrollDirection: Axis.vertical,
+                        physics: BouncingScrollPhysics(),
+                        children: eventItemModel.event_item
+                            .map((EventItem eventItem) => Positioned(
+                                top: -36,
+                           child: Container(
+                             child: Center(
                               child: Text(
-                                "Novo item",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 24),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          child: ListView(
-                            physics: NeverScrollableScrollPhysics(),
-                            children: <Widget>[
-                              ListTile(
-                                title: Text(
-                                  "YRsdfgsd sd",
-                                  style: TextStyle(color: Colors.black, fontSize:18 ),
-                                ),
-                                trailing: Icon(Icons.add),
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                        )
+                                 "Novo item",
+                                 style: TextStyle(
+                                     color: Colors.black, fontSize: 24),
+                               ),
+                             ),
+                           ),))
+                          .toList(),
+                      ),
+                        // Positioned(
+                        //   top: -36,
+                        //   child: Container(
+                        //     child: Center(
+                        //       child: Text(
+                        //         "Novo item",
+                        //         style: TextStyle(
+                        //             color: Colors.black, fontSize: 24),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // Positioned(
+                        //   child: ListView(
+                        //     physics: NeverScrollableScrollPhysics(),
+                        //     children: <Widget>[
+                        //       ListTile(
+                        //         title: Text(
+                        //           "YRsdfgsd sd",
+                        //           style: TextStyle(
+                        //               color: Colors.black, fontSize: 18),
+                        //         ),
+                        //         trailing: Icon(Icons.add),
+                        //         onTap: () {},
+                        //       ),
+                        //     ],
+                        //   ),
+                        // )
                       ],
                     ))),
               ],
