@@ -26,7 +26,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
   bool _isLoading = false;
 
   var jsonData;
-  EventItemModel eventItemModel;
+  EventItemModel eventItemModel = new EventItemModel();
 
   @override
   void initState() {
@@ -35,156 +35,87 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          PopupMenuButton<OrderOptions>(
-            itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
-              const PopupMenuItem<OrderOptions>(
-                child: Text("Atualizar"),
-                value: OrderOptions.atualizar,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.description),
+          actions: <Widget>[
+            PopupMenuButton<OrderOptions>(
+              itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+                const PopupMenuItem<OrderOptions>(
+                  child: Text("Atualizar"),
+                  value: OrderOptions.atualizar,
+                ),
+              ],
+              onSelected: _updateList,
+            ),
+          ],
+          backgroundColor: Colors.grey,
+          bottom: TabBar(
+            tabs: <Widget>[
+              Tab(
+                text: "Lista",
+                icon: Icon(Icons.playlist_add_check),
+              ),
+              Tab(
+                text: "Novo item",
+                icon: Icon(Icons.add),
               ),
             ],
-            onSelected: _updateList,
           ),
-        ],
-        backgroundColor: Color.fromRGBO(0, 155, 182, 1),
-      ),
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.white,
-        icon: Icon(
-          Icons.add,
-          color: Colors.black,
         ),
-        label: Text(
-          "Novo item",
-          style: TextStyle(color: Colors.black, fontSize: 24),
-        ),
-        onPressed: showMenu,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16.0))),
-      ),
-      body: Scaffold(
-        backgroundColor: Color.fromRGBO(251, 173, 59, 1),
-        body: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
+        body: TabBarView(
           children: <Widget>[
-            Positioned(
-              child: Text(
-                widget.description,
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
-              top: 30,
-              width: 350,
-            ),
-            Positioned(
-              child: Text(
-                "Criado em ${widget.created_at} por ${widget.user}",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
-              top: 60,
-              width: 350,
-            ),
-            PageView(children: <Widget>[
-              Scaffold(
-                backgroundColor: Colors.orange,
-                body: eventItemModel == null
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              new AlwaysStoppedAnimation<Color>(Colors.white70),
-                        ),
-                      )
-                    : GridView.count(
-                        crossAxisCount: 1,
-                        childAspectRatio: 17 / 6,
-                        scrollDirection: Axis.vertical,
-                        physics: BouncingScrollPhysics(),
-                        children: eventItemModel.event_item
-                            .map((EventItem eventItem) => GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  width: 200,
-                                  child: Card(
-                                    elevation: 10,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    margin: EdgeInsets.only(
-                                        left: 20, right: 20, top: 5),
-                                    color: Colors.white,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        ListTile(
-                                            leading: Text(
-                                              "R\$ ${eventItem.value}",
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 24),
-                                            ),
-                                            title: Text(
-                                              eventItem.description,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 21),
-                                            ),
-                                            subtitle: Text(
-                                              eventItem.location,
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )),
-                                        ButtonTheme(
-                                          child: ButtonBar(
-                                            children: <Widget>[
-                                              FlatButton(
-                                                onPressed: null,
-                                                child: Column(
-                                                  // Replace with a Row for horizontal icon + text
-                                                  children: <Widget>[
-                                                    Icon(
-                                                      Icons.check,
-                                                      color: Colors.green,
-                                                    ),
-                                                    Text(
-                                                      "Comprado",
-                                                      style: TextStyle(
-                                                          color: Colors.green),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              FlatButton(
-                                                onPressed: null,
-                                                child: Column(
-                                                  children: <Widget>[
-                                                      Icon(
-                                                      Icons.delete,
-                                                      color: Colors.red,
-                                                    ),
-                                                    Text(
-                                                      "Remove",
-                                                      style: TextStyle(
-                                                          color: Colors.red),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )))
-                          .toList(),
+            Scaffold(
+              body: eventItemModel.event_item == null
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                            Colors.lightBlueAccent),
                       ),
-              ),
-            ])
+                    )
+                  : ListView.separated(
+                      itemCount: eventItemModel.event_item == null
+                          ? 0
+                          : eventItemModel.event_item.length,
+                      separatorBuilder: (context, int index) => Divider(),
+                      itemBuilder: (context, int index) {
+                        return new Dismissible(
+                            key: new Key(
+                                eventItemModel.event_item[index].description),
+                            onDismissed: (direction) {
+                              eventItemModel.event_item.removeAt(index);
+//                              removeItem(  eventItemModel.event_item[index].id.toString());
+                              Scaffold.of(context).showSnackBar(new SnackBar(
+                                  content: new Text("Item removido...")));
+                            },
+                            background: new Container(color: Colors.red),
+                              child: new ListTile(
+                                leading: eventItemModel.event_item[index].status
+                                    .toString() ==
+                                    'false'
+                                    ? Icon(Icons.block)
+                                    : Icon(Icons.favorite_border),
+                                title: new Text(
+                                    eventItemModel.event_item[index].description),
+                                subtitle: Text("Adicionado por " +
+                                    eventItemModel.event_item[index].user),
+                                isThreeLine: true,
+                                dense: true,
+                                onTap: () {
+                                  opendialog();
+                                },
+                                trailing: Text(
+                                  "R\$ " + eventItemModel.event_item[index].value,
+                                  style: TextStyle(color: Colors.lightGreen),
+                                ),
+
+                              ),
+                          );
+                      }),
+            ),
+            Center(child: Text("asdfasdf"),)
           ],
         ),
       ),
@@ -193,7 +124,6 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
 
   getItems(id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
-
     Map<String, String> headers = {
       "access-token": "${sharedPreferences.getString("token")}",
       "uid": "${sharedPreferences.getString("uid")}",
@@ -202,9 +132,11 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
     final response = await http.get(
         "http://helpevent.gabrielflauzino.com.br/api/v1/events/${id}",
         headers: headers);
+    print(response.body);
     if (response.statusCode == 200) {
       jsonData = json.decode(response.body);
       eventItemModel = EventItemModel.fromJson(jsonData);
+      print(eventItemModel);
       setState(() {});
     } else {
       checkLoginStatus();
@@ -219,7 +151,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
       "uid": "${sharedPreferences.getString("uid")}",
       "client": "${sharedPreferences.getString("client")}"
     };
-    final response = await http.get(
+    final response = await http.delete(
         "http://helpevent.gabrielflauzino.com.br/api/v1/events/${id}",
         headers: headers);
     if (response.statusCode == 200) {
@@ -286,90 +218,20 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
     });
   }
 
-  showMenu() {
-    showModalBottomSheet(
+  opendialog() {
+    showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50.0),
-                topRight: Radius.circular(50.0),
+          return AlertDialog(
+            title: Text("Voçê comprou este item?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Sim"),
               ),
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50.0),
-                      topRight: Radius.circular(50.0),
-                    ),
-                    color: Colors.white,
-                  ),
-                  height: 36,
-                ),
-                SizedBox(
-                    height: (56 * 6).toDouble(),
-                    child: Container(
-                        child: Stack(
-                      alignment: Alignment(0, 0),
-                      overflow: Overflow.visible,
-                      children: <Widget>[
-                        GridView.count(
-                        crossAxisCount: 1,
-                        childAspectRatio: 17 / 6,
-                        scrollDirection: Axis.vertical,
-                        physics: BouncingScrollPhysics(),
-                        children: eventItemModel.event_item
-                            .map((EventItem eventItem) => Positioned(
-                                top: -36,
-                           child: Container(
-                             child: Center(
-                              child: Text(
-                                 "Novo item",
-                                 style: TextStyle(
-                                     color: Colors.black, fontSize: 24),
-                               ),
-                             ),
-                           ),))
-                          .toList(),
-                      ),
-                        // Positioned(
-                        //   top: -36,
-                        //   child: Container(
-                        //     child: Center(
-                        //       child: Text(
-                        //         "Novo item",
-                        //         style: TextStyle(
-                        //             color: Colors.black, fontSize: 24),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   child: ListView(
-                        //     physics: NeverScrollableScrollPhysics(),
-                        //     children: <Widget>[
-                        //       ListTile(
-                        //         title: Text(
-                        //           "YRsdfgsd sd",
-                        //           style: TextStyle(
-                        //               color: Colors.black, fontSize: 18),
-                        //         ),
-                        //         trailing: Icon(Icons.add),
-                        //         onTap: () {},
-                        //       ),
-                        //     ],
-                        //   ),
-                        // )
-                      ],
-                    ))),
-              ],
-            ),
+              FlatButton(
+                child: Text("Não"),
+              ),
+            ],
           );
         });
   }

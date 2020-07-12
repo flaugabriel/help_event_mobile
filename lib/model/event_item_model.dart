@@ -35,6 +35,7 @@ class EventItem {
         this.description,
         this.user,
         this.location,
+        this.status,
         this.item_id,
         this.value
       });
@@ -44,6 +45,7 @@ class EventItem {
     item_id = json['item_id'];
     description = json['description'];
     location = json['location'];
+    status = json['status'].toString();
     user = json['user'];
     value = json['value'] == null ? '0,0' : json['value'];
   }
@@ -55,6 +57,7 @@ class EventItem {
     data['item_id'] = this.item_id;
     data['user'] = this.user;
     data['location'] = this.location;
+    data['status'] = this.status;
     data['value'] = this.value;
     return data;
   }

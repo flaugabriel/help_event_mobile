@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 class CustomDrawer extends StatelessWidget {
   Widget _buidDrawerBack() => Container(
-        color: Color.fromRGBO(67, 64, 60, 1),
+        color: Colors.white,
       );
 
   @override
@@ -56,7 +56,7 @@ class CustomDrawer extends StatelessWidget {
                           Icon(
                             Icons.dashboard,
                             size: 32.0,
-                            color: Colors.white,
+                            color: Colors.grey,
                             // controller.page.round() == page ?
                             // Colors.white : Colors.grey[700] ,
                           ),
@@ -64,7 +64,7 @@ class CustomDrawer extends StatelessWidget {
                           Text(
                             "Eventos",
                             style:
-                                TextStyle(fontSize: 24.0, color: Colors.white),
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
                           )
                         ],
                       ),
@@ -85,7 +85,7 @@ class CustomDrawer extends StatelessWidget {
                           Icon(
                             Icons.list,
                             size: 32.0,
-                            color: Colors.white,
+                            color: Colors.grey,
                             // controller.page.round() == page ?
                             // Colors.white : Colors.grey[700] ,
                           ),
@@ -93,7 +93,7 @@ class CustomDrawer extends StatelessWidget {
                           Text(
                             "Meus Itens",
                             style:
-                                TextStyle(fontSize: 24.0, color: Colors.white),
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
                           )
                         ],
                       ),
@@ -111,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
                           Icon(
                             Icons.notification_important,
                             size: 32.0,
-                            color: Colors.white,
+                            color: Colors.grey,
                             // controller.page.round() == page ?
                             // Colors.white : Colors.grey[700] ,
                           ),
@@ -119,7 +119,7 @@ class CustomDrawer extends StatelessWidget {
                           Text(
                             "Notificações",
                             style:
-                                TextStyle(fontSize: 24.0, color: Colors.white),
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
                           )
                         ],
                       ),
@@ -140,7 +140,7 @@ class CustomDrawer extends StatelessWidget {
                           Icon(
                             Icons.add,
                             size: 32.0,
-                            color: Colors.white,
+                            color: Colors.grey,
                             // controller.page.round() == page ?
                             // Colors.white : Colors.grey[700] ,
                           ),
@@ -148,7 +148,7 @@ class CustomDrawer extends StatelessWidget {
                           Text(
                             "Novo evento",
                             style:
-                                TextStyle(fontSize: 24.0, color: Colors.white),
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
                           )
                         ],
                       ),
@@ -169,7 +169,7 @@ class CustomDrawer extends StatelessWidget {
                           Icon(
                             Icons.add,
                             size: 32.0,
-                            color: Colors.white,
+                            color: Colors.grey,
                             // controller.page.round() == page ?
                             // Colors.white : Colors.grey[700] ,
                           ),
@@ -177,7 +177,7 @@ class CustomDrawer extends StatelessWidget {
                           Text(
                             "Novo Item",
                             style:
-                                TextStyle(fontSize: 24.0, color: Colors.white),
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
                           )
                         ],
                       ),
@@ -195,7 +195,7 @@ class CustomDrawer extends StatelessWidget {
                           Icon(
                             Icons.person,
                             size: 32.0,
-                            color: Colors.white,
+                            color: Colors.grey,
                             // controller.page.round() == page ?
                             // Colors.white : Colors.grey[700] ,
                           ),
@@ -203,7 +203,7 @@ class CustomDrawer extends StatelessWidget {
                           Text(
                             "Configurações",
                             style:
-                                TextStyle(fontSize: 24.0, color: Colors.white),
+                                TextStyle(fontSize: 24.0, color: Colors.grey),
                           )
                         ],
                       ),

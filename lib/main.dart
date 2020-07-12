@@ -15,9 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'HelpEvent',
       theme: ThemeData(
-        primaryColor: Color.fromRGBO(251, 173, 59, 1)
         // primaryColor: Color.fromRGBO(0, 0, 155, 182)
-
       ),
       home: MainPage(),
     );
@@ -81,7 +79,7 @@ class _MainScreenState extends State<MainPage> {
     return Stack(
       children: <Widget>[
         Scaffold(
-          backgroundColor: Color.fromRGBO(251, 173, 59, 1),
+          backgroundColor: Colors.grey,
           appBar: new AppBar(
             backgroundColor: Colors.transparent,
             iconTheme: new IconThemeData(color: Colors.white,

@@ -40,7 +40,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
             ),
             body: PageView(children: <Widget>[
               Scaffold(
-                backgroundColor: Colors.orange,
+                backgroundColor: Colors.white10,
                 body: itemModel == null
                     ? Center(
                   child: CircularProgressIndicator(

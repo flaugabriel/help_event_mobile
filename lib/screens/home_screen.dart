@@ -13,13 +13,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   bool _isLoading = false;
 
   SharedPreferences sharedPreferences;
 
   var jsonData;
-  EventModel eventModel;
+  EventModel eventModel = new EventModel();
 
   @override
   void initState() {
@@ -31,73 +30,45 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return PageView(children: <Widget>[
       Scaffold(
-          backgroundColor: Color.fromRGBO(251, 173, 59, 1),
-          body: eventModel == null
-              ? Center(
-                  child: CircularProgressIndicator(
-                    valueColor:
-                        new AlwaysStoppedAnimation<Color>(Colors.white70),
-                  ),
-                )
-              : GridView.count(
-                  crossAxisCount: 1,
-                  childAspectRatio: 12/6,
-                  scrollDirection: Axis.vertical,
-                  physics: BouncingScrollPhysics(),
-                  children: eventModel.event
-                      .map(
-                        (Event event) => Card(
-
-                            margin: EdgeInsets.symmetric(vertical: 25, horizontal: 25),
-                            child: new InkWell(
-                              onTap: (){
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    
-                                    builder: (context)=>ShowEventScreen(
-                                      user: event.user,
-                                      description: event.description,
-                                      total: event.total,
-                                      created_at: event.created_at,
-                                      id: event.id,)
-                                    )
-                                );
-                              },
-                              child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    ListTile(
-                                      title: Text(
-                                        event.description,
-                                        style: TextStyle(fontSize: 24),
-                                      ),
-                                      subtitle: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                              'Criado por ${event.user} em ${event.created_at}'),
-                                          Divider(
-                                            color: Colors.transparent,
-                                          ),
-                                          Text(
-                                            '${event.items} items já adicionado',)
-                                        ],
-
-                                      ),
-
-                                      trailing: Text("R\$ ${event.total}",style: TextStyle(fontSize: 18.0,color: Colors.green),),
-
-
-                                    ),
-                                  ]
-                              ),
-                            )
-                          ),
-                      )
-                      .toList(),
+        body: eventModel == null
+            ? Center(
+                child: CircularProgressIndicator(
+                  valueColor:
+                      new AlwaysStoppedAnimation<Color>(Colors.lightBlueAccent),
                 ),
-        ),
+              )
+            : new ListView.separated(
+                itemCount: eventModel.event == null ? 0 : eventModel.event.length,
+                separatorBuilder: (context, int index)
+            => Divider(),
+                itemBuilder: (context, int index) {
+                  return new Dismissible(
+                      key: new Key(eventModel.event[index].description),
+                      onDismissed: (direction) {
+                        eventModel.event.removeAt(index);
+                        Scaffold.of(context).showSnackBar(new SnackBar(
+                            content: new Text("Item removido...")));
+                      },
+                      background: new Container(color: Colors.red),
+                      child: new ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ShowEventScreen(
+                                  user: (eventModel.event[index].user),
+                                  description:
+                                      (eventModel.event[index].description),
+                                  total: (eventModel.event[index].total),
+                                  created_at:
+                                      (eventModel.event[index].created_at),
+                                  id: (eventModel.event[index].id))));
+                        },
+                        title: new Text(eventModel.event[index].description),
+                        subtitle: new Text("Quantidade de itens "+eventModel.event[index].items.toString()),
+                        isThreeLine: true,
+                        trailing: Text("R\$ "+eventModel.event[index].total,style: TextStyle(color: Colors.lightGreen, fontSize: 24.0),),
+                      ));
+                }),
+      ),
     ]);
   }
 
@@ -124,34 +95,43 @@ class _HomeScreenState extends State<HomeScreen> {
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    if(sharedPreferences.getString("token") == null) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
-    }else{
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
+          (Route<dynamic> route) => false);
+    } else {
       var sharedPreferences = await SharedPreferences.getInstance();
 
       var url = "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_in";
-      Map params = {"email": sharedPreferences.getString("email"), "password": sharedPreferences.getString("password")};
+      Map params = {
+        "email": sharedPreferences.getString("email"),
+        "password": sharedPreferences.getString("password")
+      };
 
       var response = await http.post(url, body: params);
 
       if (response.statusCode == 200) {
         setState(() {
           _isLoading = false;
-          sharedPreferences.setString("token", (response.headers['access-token']));
+          sharedPreferences.setString(
+              "token", (response.headers['access-token']));
           sharedPreferences.setString("client", (response.headers['client']));
           sharedPreferences.setString("uid", (response.headers['uid']));
-          sharedPreferences.setString("passsword", ( sharedPreferences.getString("password")));
-          sharedPreferences.setString("email", ( sharedPreferences.getString("email")));
+          sharedPreferences.setString(
+              "passsword", (sharedPreferences.getString("password")));
+          sharedPreferences.setString(
+              "email", (sharedPreferences.getString("email")));
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (BuildContext context) => MainPage()),
-                  (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
         });
       } else {
         setState(() {
           _isLoading = false;
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
-                  (Route<dynamic> route) => false);
+              MaterialPageRoute(
+                  builder: (BuildContext context) => LoginScreen()),
+              (Route<dynamic> route) => false);
         });
       }
     }
