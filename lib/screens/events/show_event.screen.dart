@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:help_event_mobile/futures/api/event_item_api.dart';
 import 'package:help_event_mobile/model/event_item_model.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
 import 'package:http/http.dart' as http;
@@ -24,13 +25,13 @@ class ShowEventScreen extends StatefulWidget {
 
 class _ShowEventScreenState extends State<ShowEventScreen> {
   bool _isLoading = false;
-
+  EventItemApi eventItemApi = EventItemApi();
   var jsonData;
   EventItemModel eventItemModel = new EventItemModel();
 
   @override
   void initState() {
-    getItems(widget.id);
+    eventItemApi.getItems(widget.id);
   }
 
   @override
@@ -122,26 +123,7 @@ class _ShowEventScreenState extends State<ShowEventScreen> {
     );
   }
 
-  getItems(id) async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    Map<String, String> headers = {
-      "access-token": "${sharedPreferences.getString("token")}",
-      "uid": "${sharedPreferences.getString("uid")}",
-      "client": "${sharedPreferences.getString("client")}"
-    };
-    final response = await http.get(
-        "http://helpevent.gabrielflauzino.com.br/api/v1/events/${id}",
-        headers: headers);
-    print(response.body);
-    if (response.statusCode == 200) {
-      jsonData = json.decode(response.body);
-      eventItemModel = EventItemModel.fromJson(jsonData);
-      print(eventItemModel);
-      setState(() {});
-    } else {
-      checkLoginStatus();
-    }
-  }
+
 
   removeItem(id) async {
     var sharedPreferences = await SharedPreferences.getInstance();

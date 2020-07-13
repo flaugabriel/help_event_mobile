@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:help_event_mobile/futures/authentication.dart';
 import 'package:help_event_mobile/main.dart';
 import 'package:help_event_mobile/screens/items_screen.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
@@ -14,6 +15,8 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Api api = Api();
+
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topRight: Radius.circular(50), bottomRight: Radius.circular(50)),
@@ -215,19 +218,11 @@ class CustomDrawer extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () async{
-                      var sharedPreferences = await SharedPreferences.getInstance();
-                      Map<String, String> headers = {
-                        "access-token": "${sharedPreferences.getString("token")}",
-                        "uid": "${sharedPreferences.getString("uid")}",
-                        "client": "${sharedPreferences.getString("client")}"
-                      };
-                      final response = await http.delete(
-                          "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_out",
-                          headers: headers);
-                      if (response.statusCode == 200) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
-                            (Route<dynamic> route) => false);
+                      var res = await api.signOut();
+                      if(res == false){
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()));
                       }
                     },
                     child: Container(

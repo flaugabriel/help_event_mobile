@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:help_event_mobile/main.dart';
+import 'package:help_event_mobile/futures/authentication.dart';
 import 'package:help_event_mobile/screens/login_screen.dart';
 import 'package:help_event_mobile/widgets/custom_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class NewEventScreen extends StatefulWidget {
   @override
@@ -11,6 +10,9 @@ class NewEventScreen extends StatefulWidget {
 }
 
 class _NewEventScreenState extends State<NewEventScreen> {
+
+  Api authentication = Api();
+
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _data_eventController = TextEditingController();
@@ -20,11 +22,11 @@ class _NewEventScreenState extends State<NewEventScreen> {
   DateTime _date = new DateTime.now();
 
   Future<Null> _selectDate(BuildContext context) async {
-   final DateTime picked = await showDatePicker(
+    final DateTime picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now().subtract(Duration(days: 1)),
-      lastDate: DateTime.now().add( Duration(days: 1095)),
+      lastDate: DateTime.now().add(Duration(days: 1095)),
     );
 
 
@@ -34,6 +36,14 @@ class _NewEventScreenState extends State<NewEventScreen> {
         _date = picked;
         _data_eventController.text = "${picked}";
       });
+    }
+  }
+
+  isLoged() async {
+    var isLoged = await authentication.isLoged();
+    if (isLoged) {
+      MaterialPageRoute(
+          builder: (BuildContext context) => LoginScreen());
     }
   }
 
@@ -121,7 +131,7 @@ class _NewEventScreenState extends State<NewEventScreen> {
                         decoration: BoxDecoration(
                             color: Colors.green,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(32))),
+                            BorderRadius.all(Radius.circular(32))),
                         child: Center(
                           child: Text(
                             "Criar",
@@ -134,9 +144,9 @@ class _NewEventScreenState extends State<NewEventScreen> {
                           setState(() {
                             _isLoading = true;
                           });
-                          checkLoginStatus();
-                          createEvent(_descriptionController.text,
-                              _data_eventController.text);
+                          isLoged();
+//                          createEvent(_descriptionController.text,
+//                              _data_eventController.text);
                         }
                       },
                     ),
@@ -148,83 +158,5 @@ class _NewEventScreenState extends State<NewEventScreen> {
         ),
       ],
     );
-  }
-
-  createEvent(String description, String data_event) async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    var url = "http://helpevent.gabrielflauzino.com.br/api/v1/events";
-
-    Map<String, String> headers = {
-      "Context-type": "application/json; charset=utf-8",
-      "access-token": "${sharedPreferences.getString("token")}",
-      "uid": "${sharedPreferences.getString("uid")}",
-      "client": "${sharedPreferences.getString("client")}"
-    };
-
-    Map data = {"description": "${description}", "data_event": "${data_event}"};
-
-    final response = await http.post(url, headers: headers, body: data);
-
-    if (response.statusCode == 200) {
-      setState(() {
-        _isLoading = false;
-        sharedPreferences.setString(
-            "token", (response.headers['access-token']));
-        sharedPreferences.setString("client", (response.headers['client']));
-        sharedPreferences.setString("uid", (response.headers['uid']));
-        sharedPreferences.setString(
-            "passsword", (sharedPreferences.getString("password")));
-        sharedPreferences.setString(
-            "email", (sharedPreferences.getString("email")));
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => MainPage()),
-            (Route<dynamic> route) => false);
-      });
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-  checkLoginStatus() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-
-    if (sharedPreferences.getString("token") == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
-          (Route<dynamic> route) => false);
-    } else {
-      var sharedPreferences = await SharedPreferences.getInstance();
-
-      var url = "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_in";
-
-      Map params = {
-        "email": sharedPreferences.getString("email"),
-        "password": sharedPreferences.getString("password")
-      };
-
-      var response = await http.post(url, body: params);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _isLoading = false;
-          sharedPreferences.setString(
-              "token", (response.headers['access-token']));
-          sharedPreferences.setString("client", (response.headers['client']));
-          sharedPreferences.setString("uid", (response.headers['uid']));
-          sharedPreferences.setString(
-              "passsword", (sharedPreferences.getString("password")));
-          sharedPreferences.setString(
-              "email", (sharedPreferences.getString("email")));
-        });
-      } else {
-        setState(() {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => LoginScreen()),
-              (Route<dynamic> route) => false);
-        });
-      }
-    }
   }
 }

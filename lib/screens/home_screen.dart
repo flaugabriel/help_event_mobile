@@ -1,5 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:help_event_mobile/futures/api/event_api.dart';
+import 'package:help_event_mobile/futures/authentication.dart';
 import 'package:help_event_mobile/main.dart';
 import 'package:help_event_mobile/model/event_model.dart';
 import 'package:help_event_mobile/screens/events/show_event.screen.dart';
@@ -13,28 +14,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isLoading = false;
-
   SharedPreferences sharedPreferences;
+  Api api = Api();
 
   var jsonData;
+  EventApi eventApi = EventApi();
   EventModel eventModel = new EventModel();
 
   @override
   void initState() {
-    super.initState();
-    getItems();
+    isLoged();
   }
 
   @override
   Widget build(BuildContext context) {
+   consult();
+    print(eventModel.msg);
     return PageView(children: <Widget>[
       Scaffold(
-        body: eventModel == null
+        body: eventModel.event == null
             ? Center(
-                child: CircularProgressIndicator(
+                child: eventModel.msg == null ?  Text("Sem eventos...", style: TextStyle(fontSize: 24),) :
+                CircularProgressIndicator(
                   valueColor:
-                      new AlwaysStoppedAnimation<Color>(Colors.lightBlueAccent),
+                  new AlwaysStoppedAnimation<Color>(Colors.lightBlueAccent),
                 ),
               )
             : new ListView.separated(
@@ -72,68 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
     ]);
   }
 
-  getItems() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-
-    Map<String, String> headers = {
-      "access-token": "${sharedPreferences.getString("token")}",
-      "uid": "${sharedPreferences.getString("uid")}",
-      "client": "${sharedPreferences.getString("client")}"
-    };
-    final response = await http.get(
-        "http://helpevent.gabrielflauzino.com.br/api/v1/",
-        headers: headers);
-    if (response.statusCode == 200) {
-      jsonData = json.decode(response.body);
-      eventModel = EventModel.fromJson(jsonData);
-      setState(() {});
-    } else {
-      checkLoginStatus();
+  isLoged() async{
+    var isLoged = await api.isLoged();
+    if (isLoged) {
+      MaterialPageRoute(
+          builder: (BuildContext context) => LoginScreen());
     }
   }
 
-  checkLoginStatus() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-
-    if (sharedPreferences.getString("token") == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
-          (Route<dynamic> route) => false);
-    } else {
-      var sharedPreferences = await SharedPreferences.getInstance();
-
-      var url = "http://helpevent.gabrielflauzino.com.br/api/v1/auth/sign_in";
-      Map params = {
-        "email": sharedPreferences.getString("email"),
-        "password": sharedPreferences.getString("password")
-      };
-
-      var response = await http.post(url, body: params);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _isLoading = false;
-          sharedPreferences.setString(
-              "token", (response.headers['access-token']));
-          sharedPreferences.setString("client", (response.headers['client']));
-          sharedPreferences.setString("uid", (response.headers['uid']));
-          sharedPreferences.setString(
-              "passsword", (sharedPreferences.getString("password")));
-          sharedPreferences.setString(
-              "email", (sharedPreferences.getString("email")));
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext context) => MainPage()),
-              (Route<dynamic> route) => false);
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => LoginScreen()),
-              (Route<dynamic> route) => false);
-        });
-      }
-    }
+  consult() async {
+    await  eventApi.consulta();
   }
 }

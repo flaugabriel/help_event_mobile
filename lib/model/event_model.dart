@@ -1,10 +1,13 @@
 class EventModel {
   List<Event> event;
+  String msg;
 
   EventModel({this.event});
 
   EventModel.fromJson(Map<String, dynamic> json) {
-    if (json['event'] != null) {
+    if(json == null){
+      this.msg = "Sem eventos";
+    }else if (json['event'] != null) {
       event = new List<Event>();
       json['event'].forEach((v) {
         event.add(new Event.fromJson(v));
@@ -28,6 +31,7 @@ class Event {
   int items;
   String user;
   String total;
+  String error;
 
   Event(
       {this.id,
